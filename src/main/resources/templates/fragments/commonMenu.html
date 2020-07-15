@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="/admin/home" class="site_title"><i class="fa fa-paw"></i> <span>Mpark</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                        <span>Welcome,</span>
+                        <h2><span id="loginName"></span></h2>
+                    </div>
+                </div>
+
+                <div id="navbar_header" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <h3>General</h3>
+                        <div class="menu_section" id="sidebar-menu">
+                            <ul class="nav side-menu" id="sideMenu"></ul>
+                        </div>
+                    </div>
+
+
+                    <div class="menu_section">
+                        <h3>Live On</h3>
+                        <ul class="nav side-menu">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <nav class="nav navbar-nav">
+                        <ul class=" navbar-right">
+                            <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
+                                   id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="images/img.jpg" alt=""><span id="loginId"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-usermenu pull-right"
+                                     aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="javascript:;"> Profile</a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <span class="badge bg-red pull-right">50%</span>
+                                        <span>Settings</span>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">Help</a>
+                                    <a class="dropdown-item" href="/admin/login"><i
+                                            class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var sessionAdmin = "[[${session['ADMIN_INFO']}]]"; //세션 정보 가져오기
+
+        sessionAdmin = sessionAdmin.split(",",2);
+        var adminID = sessionAdmin[0].split("=",2);
+        var adminName = sessionAdmin[1].split("=",2);
+
+        $("#loginName").text(adminName[1]);
+        $("#loginId").text(adminID[1]);
+
+
+    });
+
+
+    $(function () {
+        $.post("/admin/menu/adminAuthMenu.json", function (data) {
+            displayMenu(data);
+        });
+
+    });
+
+    function displayMenu(data) {
+
+        var step;
+        var makeHtml = "";
+        var title;
+        var ulId;
+        var type = "";
+        var url;
+        var parent;
+        var menu_icon;
+
+        $("#sideMenu").empty();
+
+        if (data.length > 0) {
+            var rootMenuSeq = data[0].parent;
+
+            for (step = 0; step < data.length; step++) {
+                title = data[step].text;
+                type = data[step].type;
+                url = data[step].url;
+                parent = data[step].parent;
+                menu_icon = data[step].menu_icon;
+
+                if (step > 0 && parent == rootMenuSeq) {
+                    makeHtml += "</ul></li>";
+                }
+                if (parent == rootMenuSeq && type == "DIRECTORY") {
+                    makeHtml += "<li><a><i class='" + menu_icon + "'></i>" + title + "<span class='fa fa-chevron-down'></span></a>";
+                    makeHtml += "<ul class='nav child_menu' id='child_menu'>";
+                } else if (parent == rootMenuSeq && type == "LEAF") {
+                    makeHtml += "<li id=" + data[step].id + " onclick='javascript:page_move(" + "\"" + url + "\"" + "\," + data[step].id + ")\'><a href='#'>" + title + "</a></li>";
+                    makeHtml += "<ul>";
+                } else {
+                    //makeHtml += "<li><a href='#' onclick='javascript:page_move(&#39;"+url+"&#39;)'><i class='fa fa-home'></i>"+title+"</a>";
+                    //makeHtml += "<li><a href='#' onclick='javascript:page_move(&#39;" + url + "&#39;)'>" + title + "</a>";
+                    makeHtml += "<li id=" + data[step].id + " onclick='javascript:page_move(" + "\"" + url + "\"" + "\," + data[step].id + ")\'><a href='#'>" + title + "</a></li>";
+                }
+
+            }
+
+        }
+        makeHtml += "</ul></li>";
+
+        $("#sideMenu").append(makeHtml);
+
+        $("body").append("<script src=" + "\'/gentelella/vendors/jstree/sidemenu.min.js\'><" + "/script>");
+    }
+
+
+
+    function page_moveId(url, id){
+
+        $(location).attr('href', url);
+
+    }
+
+    function page_move(url){
+
+        $(location).attr('href', url);
+
+    }
+
+
+</script>
+</html>
+
+
+

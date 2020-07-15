@@ -1,0 +1,347 @@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+<script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+
+<!-- right_content -->
+<div class="" id="right_content">
+
+    <div class="page-title">
+        <div class="title_left">
+            <h3>DashBoard </h3>
+        </div>
+
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Go!</button>
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Hover rows <small>Try hovering over the rows</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div class="bd-example">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="http://techslides.com/demos/sample-videos/small.mp4"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Hover rows <small>Try hovering over the rows</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <button type="button" class="btn btn-primary" id="selectPlay" data-toggle="modal" data-target="#myPlayModal" >선택재생</button>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>제목</th>
+                            <th>파일명</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td> <input type="checkbox" name="chk_play" class="flat" value="test.mp3"></td>
+                            <td>타이틀1</td>
+                            <td>test.mp3</td>
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox" name="chk_play" class="flat" value="test2.mp3"></td>
+                            <td>타이틀2</td>
+                            <td>test2.mp3</td>
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox" name="chk_play" class="flat" value="test3.mp3"></td>
+                            <td>타이틀3</td>
+                            <td>test3.mp3</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 ">
+
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Hover rows <small>Try hovering over the rows</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div >
+                        Fast Fourier Transform Size (density):
+                        <input type="range" min="5" max="15" value="10" oninput="changeFFTSize(value)"><br>
+
+
+                        Min Decibels (bar variation):
+                        <input type="range" min="-200" max="200" value="-100" oninput="changeMinDecibels(value)"><br>
+
+
+                        Max Decibels (bar height):
+                        <input type="range" min="-200" max="200" value="-30" oninput="changeMaxDecibels(value)"><br>
+
+
+                        Smoothing Time Constant (bar jitter):
+                        <input type="range" min="0" max="100" value="80" oninput="changeSmoothingTimeConstant(value)"><br>
+
+                        <canvas id="waveform" width="700" height="150"  style="background-color: #0f0f0f"></canvas>
+                        <br>
+                        <canvas id="frequencies" width="700" height="150" style="background-color: #0f0f0f"></canvas>
+
+                        <br>
+                        <audio src="/test.mp3" controls controlslist="nodownload" id="audioData" onplay="visualize()"></audio>
+
+
+                        <video id="fileAudioArray2" controls loop>
+                            <source name='audioFile' src='/test.mp3' type='audio/mpeg'>
+                            <source name='audioFile' src='/test2.mp3' type='audio/mpeg'>
+                            <source name='audioFile' src='/test3.mp3' type='audio/mpeg'>
+                        </video>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div><!--/row-->
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Hover rows <small>Try hovering over the rows</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <audio id="audio-source">
+                        <source src="/test.mp3" type="audio/mpeg">
+                    </audio>
+
+                    <button id="play" onclick="javascript:play()">재생/정지</button>
+                    <button id="up" onclick="javascript:volumeDown()">볼륨 다운</button>
+                    <button id="down" onclick="javascript:volumeUp()">볼륨 업</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /right_content -->
+
+<!-- Modal -->
+<div class="modal fade" id="myPlayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-center" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title" id="myModalLabel">파일재생</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                재생파일 : <input type="text" name="array" id="array" /><br>
+
+                <!--<audio id="myaudio" controls>
+                    <source id="main">
+                </audio>
+
+                <button id='play-next'>다음 곡 재생하기</button>
+                -->
+
+                <audio id="fileAudioArray" controls>
+                    <source id="main">
+                </audio>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-xs btn-secondary audio-close" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/audio.js"></script>
+
+<script src="/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script src="/mobilepark_confirm.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var myAudio = document.getElementById("fileAudioArray");
+
+        $("#selectPlay").click(function () {
+
+            var send_array = new Array();
+            var send_cnt = 0;
+            var fileName, makeHtml, idName= "";
+            var filePath = "/";
+
+            $('source[name="audioFile"]').remove();
+
+            $('input:checkbox[name="chk_play"]').each(function() {
+                //this.checked = true; //checked 처리
+                if(this.checked){//checked 처리된 항목의 값s
+                    //console.log("value : " + this.value);
+                    fileName = filePath + this.value;
+                    send_array[send_cnt] = fileName;
+                    send_cnt++;
+
+                    idName = "audioFile" + send_cnt;
+
+                    makeHtml += "<source id='"+idName+"' name='audioFile' src='"+ fileName +"' type='audio/mpeg'>"
+                }
+            });
+
+            //console.log("send_cnt : " + send_cnt);
+            //console.log("makeHtml : " + makeHtml);
+            $("#fileAudioArray").append(makeHtml);
+            $("#array").val(send_array);
+            $("#main").attr("src", send_array[0]);
+
+
+        });
+
+        var index = 2;
+        myAudio.onended = function() {
+            //console.log("The audio has ended" + $('#audioFile'+index).attr('src'));
+
+            $('#fileAudioArray source#main').attr('src', $('#audioFile'+index).attr('src'));
+
+            //로직 순서 중요
+            if($('#audioFile'+index).attr('src') != undefined) {
+                $("#fileAudioArray")[0].load();
+                $("#fileAudioArray")[0].play();
+            }else{
+                $("#fileAudioArray")[0].pause();
+                index = 1;
+                $('#fileAudioArray source#main').attr('src', $('#audioFile'+index).attr('src'));
+                $("#fileAudioArray")[0].load();
+            }
+            index++;
+        };
+
+
+        //닫기 버튼 누를 시 재생 중지 시키기
+        $(".audio-close").click(function () {
+            myAudio.pause(); //모달 창 받을 시 중지
+            myAudio.currentTime = 0; //처음부터 재생
+        });
+
+        $("#captchaImg").css('width', '45%').addClass('btn-light').
+        hover().css('cursor', 'pointer').
+        next().css('font-size','180%');
+
+        $("#captchaImg").on("click", function () {
+
+            var time = new Date().getTime();
+            var src = '/common/simpleCaptcha?time=' + time;
+            $("#captchaImg").attr('src', src);
+
+        });
+
+        $("#captchaSmt").on('click', function () {
+            var form = $('#loginform')[0];
+            var data = new FormData(form);
+
+            console.log(data.get(id));
+            console.log(data.get(pw));
+            console.log(data.get(captcha));
+
+            $.ajax({
+                type: "POST",
+                url: "/common/captchaAnswer",
+                dataType: "json",
+                data: $('#loginform').serialize(),
+                success: function (data) {
+                    console.log("message : ", data.message);
+                    console.log("result code : ", data.result);
+
+                    alertModal(data.message, "/admin/home");
+                },
+                error: function (req, status, error) {
+                    alertModal("code : " + req.status + "\n error : " + error);
+                }
+            });
+        });
+
+
+    });
+
+
+    //var audioCtx = new AudioContext();
+    var audio = document.getElementById("audio-source");
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var source = audioCtx.createMediaElementSource(audio);
+
+    var gainNode = audioCtx.createGain();
+    var gainConnected = source.connect(gainNode);
+    gainConnected.connect(audioCtx.destination);
+
+    function play() {
+        if (audio.paused) {
+            audio.play()
+        }
+        else {
+            audio.pause()
+        }
+    }
+
+    function volumeUp() {
+
+        if (gainNode.gain.value > 2) {
+            gainNode.gain.value = 2
+        }
+        else {
+            gainNode.gain.value += 0.2
+        }
+    }
+
+    function volumeDown() {
+
+        if (gainNode.gain.value < 0) {
+            gainNode.gain.value = 0
+        }
+        else {
+            gainNode.gain.value -= 0.2
+        }
+    }
+
+</script>
+
+

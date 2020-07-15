@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/gentelella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/gentelella/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- jQuery custom content scroller -->
+    <link href="/gentelella/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+
+    <!-- jquery-confirm -->
+    <link href="/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/gentelella/build/css/custom.min.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="" class="site_title"><i class="fa fa-paw"></i> <span>Mpark</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+
+                </div>
+                <!-- /menu profile quick info -->
+
+                <br />
+
+                <!-- sidebar menu -->
+
+                <!-- /sidebar menu -->
+
+                <!-- /menu footer buttons -->
+
+                <!-- /menu footer buttons -->
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav" style="padding-bottom: 0px">
+            <div style="background: #EDEDED;">
+                <nav class="nav navbar-nav">
+                    <ul class=" navbar-right">
+                        <li class="nav-item dropdown open" style="padding-left: 15px;">
+                            <a href="/admin/login" class="user-profile" aria-expanded="false">
+                                로그인 페이지
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- right_content -->
+        <div class="" id="right_content" style="padding-left: 230px">
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="x_panel" style="height: 700px">
+                        <div class="x_title">
+                            <h2>ID/PWD 찾기</h2>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+
+                        <div class="x_content">
+                            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ID 찾기</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">PWD 찾기</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">사용자 이름 <span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="user_name" name="user_name" required="required" class="form-control " value="" >
+                                        </div>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">전화번호<span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="user_phone" name="user_phone" required="required" class="form-control" value="" placeholder="“-”없이 입력해 주세요">
+                                        </div>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">이메일<span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="email" name="email" required="required" class="form-control" value="" >
+                                        </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <div class="item form-group">
+                                        <div class="col-md-6 col-sm-6 offset-md-3">
+                                            <button class="btn btn-primary" type="button" id="isuser_pename">아이디 찾기</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">사용자 ID <span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="user_id" name="user_id" required="required" class="form-control " value="" >
+                                        </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <div class="item form-group">
+                                        <div class="col-md-6 col-sm-6 offset-md-3">
+                                            <button class="btn btn-primary" type="button" id="isuser_id">이메일 전송</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /right_content -->
+
+        <!-- footer content -->
+        <footer>
+            <div class="pull-right">
+                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/gentelella/vendors/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<!-- FastClick -->
+<script src="/gentelella/vendors/fastclick/lib/fastclick.js"></script>
+<!-- NProgress -->
+<script src="/gentelella/vendors/nprogress/nprogress.js"></script>
+<!-- jQuery custom content scroller -->
+<script src="/gentelella/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<!-- Custom Theme Scripts -->
+<script src="/gentelella/build/js/custom.min.js"></script>
+
+<!-- jquery-confirm -->
+<script src="/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script src="/mobilepark_confirm.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $('#isuser_pename').on("click",function(){
+            var name = $('#user_name').val();
+            var phone = $('#user_phone').val();
+            var email = $('#email').val();
+
+            if( !chkName(name) ){
+                return false;
+            }
+            if( !chkPhone(phone) ){
+                return false;
+            }
+
+            if( !chkEmailform(email) ){
+                return false;
+            }
+
+            $.ajax({
+                type    : "GET",
+                url        : "/common/isuser",
+                data    : {
+                    name : name,
+                    phone : phone,
+                    email : email
+                },
+                success :  function(response){
+                    if(response==0){
+                        alertModal('가입된 사용자가 아닙니다.', "");
+                        return false;
+                    }else{
+                        $.ajax({
+                            type    : "GET",
+                            url        : "/common/findid",
+                            data    : {
+                                name : name,
+                                phone : phone,
+                                email : email
+                            },
+                            success :  function(response){
+                                var strArray = response.split('/');
+                                if(strArray.length==2){
+                                    alerttitleModal("아이디", strArray[0], "");
+                                }
+                                else{
+                                    var list = "";
+                                    for(var a = 1; a<strArray.length; a++){
+                                        list+= "<br>" + a + ". " + strArray[a-1];
+                                    }
+                                    alerttitleModal("아이디 목록",list,"")
+                                }
+                                return false;
+                            },
+                            error : function(){
+                                alert("error! 관리자에게 문의하세요");
+                                return false;
+                            }
+                        });
+                    }
+                },
+                error : function(){
+                    alert("error! 관리자에게 문의하세요");
+                    return false;
+                }
+            });
+
+        });
+
+        $('#isuser_id').on("click",function(){
+            var id = $('#user_id').val();
+
+            if( !chkEmailform(id) ){
+                return false;
+            }
+
+            $.ajax({
+                type    : "GET",
+                url        : "/common/isuser",
+                data    : {
+                    user_id : id
+                },
+                success :  function(response){
+                    if(response==0){
+                        alertModal("가입된 유저가 아닙니다.","");
+                        return false;
+                    }else{
+                        $.ajax({
+                            type : "POST",
+                            url : "/common/findpwd",
+                            data : {
+                                user_id : id
+                            },
+                            success : function(res){
+                                $.alert({
+                                    title : "",
+                                    content : res,
+                                    onClose : function() {
+                                        location.href="/admin/login";
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                },
+                error : function(){
+                    alert("error! 관리자에게 문의하세요");
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

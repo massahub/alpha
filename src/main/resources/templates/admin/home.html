@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<title th:text="#{main.title}"></title>
+
+<th:block th:replace="fragments/commonHeader"></th:block>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+        <th:block th:replace="fragments/commonMenu"></th:block>
+        <div class="right_col" role="main" id="content">
+
+
+        </div>
+        <th:block th:replace="fragments/commonFooter"></th:block>
+
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$("#header").load("/home/top.htm");
+        $("#content").load("/admin/dashboard");
+        //$("#footer").load("/home/copyright.htm");
+        //  $("#sideMenu").load("/admin/menu");
+    });
+
+    function logout() {
+        location.href = '/home/logout.htm';
+    }
+
+
+</script>
+
+</body>
+</html>

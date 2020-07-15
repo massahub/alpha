@@ -1,0 +1,75 @@
+spring:
+  profiles:
+    active: local
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+---
+
+server:
+  port: 8090
+  tomcat:
+    accesslog:
+      pattern: "%{yyyy-MM-dd HH:mm:ss}t\t%s\t%r\t%{User-Agent}i\t%{Referer}i\t%a\t%b"
+      enabled: true
+    basedir: .
+
+spring:
+  profiles: local
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://3.34.5.49:3306/testdb?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: root.123
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  messages:
+    #basename: classpath:/messages/messages
+    basename: messages/messages
+    encoding: UTF-8
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+        cache: false
+        check-template: true
+        check-template-location: true
+        contents-type: text/html
+        enabled: true
+        encoding: UTF-8
+        # excluded-view-names:
+        # mode: HTML5
+        # prefix: /templates/
+        # suffix: .html
+        # template-resolver-order:
+        # view-names:
+
+
+mybatis:
+  type-aliases-package: com.mobilepark.springboot.repository
+  mapper-locations: mybatis/mapper/*.xml
+
+
+logging:
+  file: /Users/kas0610/Project/logs/mobilepark2019.log
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
+
+resources:
+  static:
+    fileupload:
+      location: /Users/atingle/Downloads/
+      uri_path: /file/
+      captcha: captcha/
+      file_path: fileupload/
+      pdf : pdf/

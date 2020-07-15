@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+
+    <style>
+        #captchaImg {
+            padding:6%;
+            border: 1px solid #0275d8;
+            border-radius: 2%;
+        }
+    </style>
+
+    <script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+
+    <!--<link rel="stylesheet" type="text/css" href="css/jquery.realperson.css">
+    <script type="text/javascript" src="js/jquery.plugin.js"> </script>
+    <script type="text/javascript" src="js/jquery.realperson.js"> </script>-->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title th:text="#{main.title}"></title>
+
+    <!-- jquery-confirm -->
+    <link href="/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/gentelella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/gentelella/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="/gentelella/vendors/animate.css/animate.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/gentelella/build/css/custom.min.css" rel="stylesheet">
+  </head>
+
+  <body class="login">
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <form action="/admin/authenticate" method="post" id="adminForm">
+              <h1>Login Form</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="Username" required="" name="userId" value="root"/>
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" required="" name="userPassword" value="root123456*"/>
+              </div>
+
+              <!--simpleCaptcha-->
+              <div class="md-form mb-4 captcha_div" style="display: none">
+                  <div style="margin-bottom: 2%">
+                    <img id="captchaImg" alt="캡차 이미지" title="클릭시 새로고침" src="/common/simpleCaptcha">
+                    <button class="btn btn-primary refresh" type="button" style="padding: 9.6% 8%;margin:3%">새로고침</button>
+                  </div>
+                  <input type="text" id="captcha" class="form-control" name="captcha" autocomplete="off" value="">
+              </div>
+
+              <!--naver capcha-->
+              <!--<div id="captcha_Img" style="margin: 0% 2%;">
+                <img src='' style='float:left' id='cap_image'>
+                <button class="btn btn-outline-primary" type="button" id="refresh">새로고침</button>
+              </div>
+                <input type="hidden" id="key" name="key">
+                <input type="text"  class="form-control" id="value" name="value" required="">-->
+
+              <div>
+                <!--<a class="btn btn-default submit" href="index.html">Log in</a>-->
+                <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit">Sign in</button>
+                <a class="reset_pass" href="/common/findidpwd">ID/PW 찾기</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+
+              <div class="separator">
+               <!-- <p class="change_link">첫 방문 이신가요?
+                  <a href="#signup" class="to_register"> 회원가입</a>
+                </p>-->
+                <p style="size:20px; color: #FF1C19;" th:text="${error}"></p>
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                </div>
+              </div>
+
+            </form>
+          </section>
+        </div>
+
+       <!-- <div id="register" class="animate form registration_form">
+          <section class="login_content">
+            <form>
+              <h1>Create Account</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="Username" required="" />
+              </div>
+              <div>
+                <input type="email" class="form-control" placeholder="Email" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="Password" required="" />
+              </div>
+              <div>
+                <a class="btn btn-default submit" href="index.html">Submit</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Already a member ?
+                  <a href="#signin" class="to_register"> Log in </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+        -->
+
+      </div>
+    </div>
+  </body>
+
+  <!-- jquery-confirm -->
+  <script src="/jquery-confirm/jquery-confirm.min.js"></script>
+
+  <script type="text/javascript">
+
+      $(window).bind("beforeunload", function (e) {
+          $.ajax({
+              type : "POST",
+              url : "/common/closing?close=close",
+              async: false
+          });
+      });
+
+      $(document).ready(function () {
+
+          $.ajax({
+              type : "POST",
+              url : "/common/captchaCnt",
+              dataType: "json",
+              success : function(data){
+
+                  var $captchaCnt = Number(data.captchaCnt);
+
+                  console.log("captchaCnt : ", $captchaCnt);
+
+                  if($captchaCnt >= 3) {
+                      $(".captcha_div").show();
+                  }
+
+              },
+              error : function(){
+                  console.log("error!!");
+                  return false;
+              }
+          });
+
+          $(".refresh").on('click', function () {
+              var time = new Date().getTime();
+              var src = '/common/simpleCaptcha?time=' + time;
+              $("#captchaImg").attr('src', src);
+          });
+
+          //$(document).keydown(function (event) {
+          //    if(event.keyCode == '13') {
+          //            event.preventDefault();
+          //    }
+          //});
+
+          /*function captchaInvoke () {
+
+              $.ajax({
+                  type: "POST",
+                  url: "/common/captcha",
+                  dataType: "json",
+                  async: false,
+                  success: function (data) {
+                      console.log("result Key : ", data.key);
+                      console.log("result Image : ", data.Image);
+                      $("#key").val(data.key);
+
+                      $("#cap_image").attr('src', data.Image);
+
+                      console.log($('#cap_image').attr('src'));
+                  },
+                  error: function (req, status, error) {
+                      alertModal("code : " + req.status + "\n error : " + error);
+                  }
+              });
+
+          }*/
+      });
+
+</script>
+
+</html>

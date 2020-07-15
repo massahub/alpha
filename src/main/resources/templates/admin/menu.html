@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script type="text/javascript">
+    $(function() {
+        $.post("/admin/menu/adminAuthMenu.json", function(data) {
+            displayMenu(data);
+        });
+    });
+
+    function displayMenu(data) {
+
+        var step;
+        var makeHtml = "";
+        var title;
+        var ulId;
+        var type = "";
+        var url;
+        var parent;
+        var menu_icon;
+
+        $("#sideMenu").empty();
+
+        if (data.length > 0) {
+            var rootMenuSeq = data[0].parent;
+
+            for (step = 0; step < data.length; step++) {
+                title = data[step].text;
+                type = data[step].type;
+                url = data[step].url;
+                parent = data[step].parent;
+                menu_icon = data[step].menu_icon;
+
+                if (step > 0 && parent == rootMenuSeq) {
+                    makeHtml += "</ul></li>";
+                }
+                if(parent == rootMenuSeq && type == "DIRECTORY") {
+                    makeHtml += "<li><a><i class='"+menu_icon+"'></i>" + title + "<span class='fa fa-chevron-down'></span></a>";
+                    makeHtml += "<ul class='nav child_menu' id='child_menu'>";
+                }else if (parent == rootMenuSeq && type == "LEAF"){
+                    makeHtml += "<li id=" + data[step].id + " onclick='javascript:page_move(" + "\"" + url + "\"" + "\," + data[step].id + ")\'><a>" + title + "</a></li>";
+                    makeHtml += "<ul>";
+                }else {
+                    //makeHtml += "<li><a href='#' onclick='javascript:page_move(&#39;"+url+"&#39;)'><i class='fa fa-home'></i>"+title+"</a>";
+                    //makeHtml += "<li><a href='#' onclick='javascript:page_move(&#39;" + url + "&#39;)'>" + title + "</a>";
+                    makeHtml += "<li id=" + data[step].id + " onclick='javascript:page_move(" + "\"" + url + "\"" + "\," + data[step].id + ")\'><a>" + title + "</a></li>";
+                }
+
+            }
+
+        }
+        makeHtml += "</ul></li>";
+
+        $("#sideMenu").append(makeHtml);
+
+        $("body").append("<script src=" + "\'/gentelella/vendors/jstree/sidemenu.min.js\'><" + "/script>");
+    }
+/*
+    var step = 0;
+
+    function displayMenu(data) {
+        var makeHtml = "";
+        var parent = 0;
+        var type = 0;
+        var parentCheck = true;
+        var typeCheck = true;
+
+        $("#sideMenu").empty();
+
+        if (data.length > 0) {
+
+            for(step = step; step < data.length; step++) {
+
+                if(data[step].type == "DIRECTORY") {
+                    makeHtml += makeMenuDirectory(makeHtml, step, data);
+                } else {
+                    makeHtml += makeMenuLeaf(makeHtml, step, data);
+                }
+            }
+
+
+        }
+        makeHtml += "</ul></li>";
+
+        $("#sideMenu").append(makeHtml);
+
+        $("body").append("<script src=" + "\'/gentelella/vendors/jstree/sidemenu.min.js\'><" + "/script>");
+    }
+
+    function makeMenuDirectory(makeHtml, index, data) {
+        var parent = 0;
+        var type = 0;
+        var parentCheck = true;
+        var typeCheck = true;
+
+        for(step = index; step < data.length; step++) {
+
+            if(index == step) {
+                parent = data[step].parent;
+                type = data[step].type;
+            }
+
+            if(parent == data[step].parent) {
+                parentCheck = true;
+            } else {
+                parentCheck = false;
+                parent = data[step].parent;
+            }
+
+            if(type == data[step].type) {
+                typeCheck = true;
+            } else {
+                typeCheck = false;
+                type = data[step].type;
+            }
+
+            if(data[step].type == "LEAF") {
+                makeHtml = makeMenuLeaf(makeHtml, step, data);
+                break;
+            } else if(parent != data[step].parent) {
+                makeHtml += "</ul>";
+                break;
+            } else {
+                makeHtml += "<li><a><i class='"+data[step].menu_icon+"'></i>" + data[step].text + "<span class='fa fa-chevron-down'></span></a>";
+                makeHtml += "<ul class='nav child_menu' id='child_menu'>";
+            }
+        }
+
+        return makeHtml;
+    }
+
+    function makeMenuLeaf(makeHtml, index, data) {
+        var parent = 0;
+        var type = 0;
+        var parentCheck = true;
+        var typeCheck = true;
+
+        for(step = index; step < data.length; step++) {
+
+            if(index == step) {
+                parent = data[step].parent;
+                type = data[step].type;
+            }
+
+            if(parent == data[step].parent) {
+                parentCheck = true;
+            } else {
+                parentCheck = false;
+                parent = data[step].parent;
+            }
+
+            if(type == data[step].type) {
+                typeCheck = true;
+            } else {
+                typeCheck = false;
+                type = data[step].type;
+            }
+
+            if(data[step].type == "DIRECTORY") {
+                makeHtml = makeMenuDirectory(makeHtml, step, data);
+                break;
+            } else if(parent != data[step].parent) {
+                break;
+            } else {
+                makeHtml += "<li id=" + data[step].id + " onclick='javascript:page_move(" + "\"" + data[step].url + "\"" + "\," + data[step].id + ")\'><a>" + data[step].text + "</a></li>";
+            }
+
+        }
+
+        return makeHtml;
+    }
+*/
+    function page_move_real(url, id) {
+
+        $('ul.nav.child_menu').find('li.active').removeClass('active');
+        $("#"+id).addClass('active');
+        $.ajax({
+            type : "GET",
+            url : url,
+            success : function(response){
+                $("#content").html(response);
+
+            },
+            error : function(){
+                console.log("error!!");
+                //err_page();
+                return false;
+            }
+        });
+    }
+
+    function page_move(url){
+
+        $.ajax({
+            type : "GET",
+            url : url,
+            success : function(response){
+                $("#content").html(response);
+
+            },
+            error : function(){
+                console.log("error!!");
+                return false;
+            }
+        });
+    }
+</script>
+
+</head>
+<body class="nav-md">
+
+<div class="menu_section" id="sidebar-menu">
+    <ul class="nav side-menu" id="sideMenu"></ul>
+</div>
+
+</body>
+</html>
+
+
+
