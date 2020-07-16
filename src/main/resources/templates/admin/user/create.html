@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="fragments/commonHeader"></th:block>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <th:block th:replace="fragments/commonMenu"></th:block>
+        <div class="right_col" role="main" id="content">
+            <!-- right_content -->
+            <div class="" id="right_content">
+
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>계정 관리</h3>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+          <button class="btn btn-default" type="button">Go!</button>
+        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 ">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Form Design
+                                    <small>different form elements</small>
+                                </h2>
+                                <!--<ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a class="dropdown-item" href="#">Settings 1</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                </ul>-->
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <br/>
+                                <form id="dataForm" data-parsley-validate class="form-horizontal form-label-left"
+                                      name="dataForm" method="post"
+                                      th:action="@{/create}" data-toggle="validator">
+                                    <input type="hidden" id="mcode" name="mcode" th:value="${key}">
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">사용자ID
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-4 col-sm-4 ">
+                                            <input type="text" id="adminId" name="adminId" required="required"
+                                                   class="form-control " value="">
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 ">
+                                            <!--<button type="button" class="btn btn-secondary" id="btn_chk_adminId">ID중복확인</button>-->
+                                        </div>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">사용자명
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="admin_name" name="adminName" required="required"
+                                                   class="form-control" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">비밀번호
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="password" id="adminPassword" name="password"
+                                                   required="required" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">비밀번호
+                                            확인 <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="password" id="adminConfirmPassword" name="adminConfirmPassword"
+                                                   required="required" class="form-control" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">전화번호
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="phone" name="phone" required="required"
+                                                   class="form-control" value="" placeholder="“-”없이 입력해 주세요">
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">이메일
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-4 col-sm-4 ">
+                                            <input type="text" id="email" name="email" required="required"
+                                                   class="form-control " value="">
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 ">
+                                            <!--<button type="button" class="btn btn-secondary" id="btn_chk_adminId">ID중복확인</button>-->
+                                        </div>
+                                    </div>
+
+                                    <!--
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Password Confirm <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="password" id="passwordConfirm" name="passwordConfirm" required="required" class="form-control" value="" >
+                                            <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#password" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                        -->
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="">사용자그룹권한 <span
+                                                class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <select class="form-control col-md-7 col-xs-12" id="admin_group_seq"
+                                                    name="adminGroupSeq">
+                                                <option th:each="adminGroup : ${adminGroups}"
+                                                        th:value="${adminGroup.getAdminGroupSeq()}"
+                                                        th:text="${adminGroup.getName()}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="">보안문자입력
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="ln_solid"></div>
+                                    <div class="item form-group">
+                                        <div class="col-md-6 col-sm-6 offset-md-3">
+                                            <button class="btn btn-primary" type="button"
+                                                    onclick="javascript:page_move('/admin/user/search')"
+                                                    th:text="#{common.button.list}"></button>
+                                            <button type="button" class="btn btn-success" id="save"
+                                                    th:text="#{common.button.save}"></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /right_content -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        //추가 예정
+        //$('#dataForm').validator();
+
+        $('#btn_chk_adminId').click(function () {
+
+        });
+
+
+        $('#save').click(function () {
+            var adminIdEmail = $("#adminId").val();
+            var adminPassword = $("#adminPassword").val();
+            var adminConfirmPassword = $("#adminConfirmPassword").val();
+            var adminPhone = $("#phone").val();
+            var email = $("#email").val();
+
+            if (!chkEmail(adminIdEmail)) {
+                return false;
+            }
+
+            if (!chkPassword(adminPassword)) {
+                return false;
+            }
+
+            if (adminPassword != adminConfirmPassword) {
+                alertModal("비밀번호 확인 바랍니다.");
+                return false;
+            }
+
+            if (!chkPhone(adminPhone)) {
+                return false;
+            }
+
+            if (!chkEmailform(email)) {
+                return false;
+            }
+
+            var queryString = $("form[name=dataForm]").serialize();
+
+            $.ajax({
+                type: 'GET',
+                url: '/admin/user/create.json',
+                data: queryString,
+                //dataType : 'json',
+                beforeSend: function (xhr) {
+                    //xhr.setRequestHeader("ApiKey", "asdfasxdfasdfasdf");
+                    xhr.setRequestHeader("Content-type", "application/json");
+                },
+                success: function (response) {
+                    //console.log(response);
+                    //alert(response);
+                    //page_move("/admin/user/search");
+
+                    alertModal(response, "/admin/user/search");
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+
+        });
+    });
+
+</script>
+
+</body>
+</html>

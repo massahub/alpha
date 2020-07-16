@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--<title th:text="메뉴 기능 생성"></title>-->
+
+<div class="x_content">
+    <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+        <tbody>
+
+        <tr>
+            <td style="width:20%"> NAME </td>
+            <td>
+                <input type="text" id="name" style="width: 70%" value="">
+            </td>
+        </tr>
+        <tr>
+            <td> URL </td>
+            <td>
+                <input type="text" id="url" style="width: 70%" value="">
+            </td>
+        </tr>
+        <tr>
+            <td> AUTH </td>
+            <td>
+                <select id="auth">
+                    <option value="CREATE">CREATE</option>
+                    <option value="READ">READ</option>
+                    <option value="UPDATE">UPDATE</option>
+                    <option value="DELETE">DELETE</option>
+                    <option value="APPROVE">APPROVE</option>
+                    <option value="ANY">ANY</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td> DESCRIPTION </td>
+            <td>
+                <textarea style="width:300px;" rows="4" cols="10" id="description"></textarea>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <table style="width:100%">
+            <tr>
+                <td align="right">
+                    <input class="btn btn-primary" type="button" value='저장' id="btn_save" data-dismiss="modal"/>
+                    <input class="btn btn-danger" type="button" value='취소' data-dismiss="modal"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<link href="/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+<script src="/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="/mobilepark_confirm.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        /*<![CDATA[*/
+        var menuSeq = [[${menuSeq}]];
+        /*]]*/
+
+        // 저장
+        $('#btn_save').click(function() {
+            $.ajax({
+                url : "/admin/menu/func/create.json",
+                method : "POST",
+                data : {
+                    menuSeq :       menuSeq,
+                    name :          $("#name").val(),
+                    url :           $("#url").val(),
+                    auth :          $("#auth").val(),
+                    description :   $("#description").val()
+                },
+                dataType : "text",
+                success:function(data) {
+                    console.log(data);
+                    alertModal(data, "/admin/menu/search");
+                },
+                error:function(request,status,error) {
+                    console.log("code["+request.status+"] message["+request.responseText+"] error["+error+"]");
+                }
+            });
+        });
+
+    });
+
+</script>
+
+</html>

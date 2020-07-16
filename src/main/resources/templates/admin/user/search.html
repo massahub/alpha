@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="fragments/commonHeader"></th:block>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <th:block th:replace="fragments/commonMenu"></th:block>
+        <div class="right_col" role="main" id="content">
+            <!-- right_content -->
+            <div class="" id="right_content">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>계정 관리</h3>
+                    </div>
+
+                    <div class="title_right">
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row" style="display: block;">
+                    <div class="col-md-12 col-sm-12  ">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>계정 목록 </h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" th:with="sessionMenu=${session['MENU_AUTH']}">
+                                <th:block th:if="${#strings.indexOf(sessionMenu,'C') >= 0}">
+                                <button type="button" class="btn btn-primary" th:text="#{common.button.create}"
+                                        th:onclick="|javascript:page_move('/admin/user/create')|"></button>
+                                </th:block>
+
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>사용자ID</th>
+                                        <th>사용자명</th>
+                                        <th>사용자그룹권한</th>
+                                        <th>등록일</th>
+                                        <th>관리</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="data : ${lists}">
+                                        <td th:text="${data.getAdminId()}">
+                                            <!--<a href="#" th:href="@{modify/(admin_id=${data.getAdminId()})}" th:text="${data.getAdminId()}"></a>-->
+                                            <!--<a href="#" th:text="${data.getAdminId()}" th:onclick="|javascript:page_move('/admin/user/modify?admin_id=${data.getAdminId()}')|" ></a>-->
+                                            <!--<a href="#" th:text="${data.getAdminId()}" th:onclick="|javascript:page_move('/admin/user/modify?admin_seq=${data.getAdminSeq()}')|" ></a>-->
+                                            <!-- onclick param 값이 Integer 만 가능 한 이유에 대해서 확인 중 -->
+                                        </td>
+                                        <td th:text="${data.getAdminName()}"></td>
+                                        <td th:text="${data.getAdminGroup().getName()}"></td>
+                                        <td th:text="${#dates.format(data.getRegDate(),'yyyy-MM-dd HH:mm')}"></td>
+                                        <td>
+                                            <th:block th:if="${#strings.indexOf(sessionMenu,'U') >= 0}">
+                                            <a href="#" class="btn btn-xs btn-info btn_modify"
+                                               th:attr="data-adminId=${data.getAdminId()}">수정</a>
+                                            </th:block>
+                                            <th:block th:if="${#strings.indexOf(sessionMenu,'D') >= 0}">
+                                            <a href="#" class="btn btn-secondary btn_pwd" data-toggle="modal"
+                                               data-target="#myPwdModal" th:attr="data-pwdAdminId=${data.getAdminId()}">비밀번호변경</a>
+                                            </th:block>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block th:replace="fragments/commonModal"></th:block>
+        </div>
+        <th:block th:replace="fragments/commonFooter"></th:block>
+    </div>
+</div>
+
+<!-- /right_content -->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var sessionAuth = "[[${session['MENU_AUTH']}]]"; // 현재 N -> 왜냐하면 URL이 맞지 않았다.
+        console.log(sessionAuth);
+
+
+        $('#myPwdModal').on('show.bs.modal', function (event) {
+
+            //console.log($(this).attr("data-pwdAdminId"));
+            // var button = $(event.relatedTarget); // Button that triggered the modal
+            //var objectName = button.data('pwdAdminId'); // Extract info from data-object-name attribute
+
+            //console.log(objectName);
+        });
+
+        $('.btn_pwd').on('click', function () {
+
+            console.log($(this).attr("data-pwdAdminId"));
+
+            $('#modalAdminId').val($(this).attr("data-pwdAdminId"));
+
+            $("#passwordForm").each(function () {
+                this.reset();
+            });
+
+
+        });
+
+        $('#btn_pwd_modify').click(function () {
+
+            //var queryString = $("form[name=passwordForm]").serialize() ;
+
+            var newPassword = $("#newPassword").val();
+            var confirmNewPassword = $("#confirmNewPassword").val();
+
+
+            if (!chkPassword(newPassword)) {
+                return false;
+            }
+
+            if (newPassword != confirmNewPassword) {
+                alertModal("비밀번호 확인 바랍니다.");
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/user/pwd_modify.json",
+                //data : queryString,
+                data: {
+                    adminId: $("#modalAdminId").val(),
+                    //prePassword : $("#prePassword").val(),
+                    newPassword: $("#newPassword").val()
+                },
+                //dataType: 'json',
+                success: function (response) {
+
+                    console.log(response);
+                    //page_move("/admin/user/search");
+                    //if(response == "SUCCESS"){
+                    //$('#myPwdModal').modal("hide");
+                    alertModal(response);
+                    $('.modalClose').trigger('click');
+                    //}else{
+                    //    alertModal(response);
+                    // }
+                },
+                error: function () {
+                    console.log("error!!");
+                    //err_page();
+                    return false;
+                }
+            });
+        });
+
+        $('.btn_modify').on('click', function () {
+
+            //console.log($(this).attr("data-adminId"));
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/user/modify",
+                data: {
+                    adminId: $(this).attr("data-adminId")
+                },
+                success: function (response) {
+                    $("#content").html(response);
+                },
+                error: function () {
+                    console.log("error!!");
+                    //err_page();
+                    return false;
+                }
+            });
+
+        });
+
+    });
+
+</script>
+</body>
+</html>

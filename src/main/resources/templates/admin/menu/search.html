@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+    <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+            <th:block th:replace="fragments/commonHeader"></th:block>
+            <link rel="stylesheet" href="/gentelella/vendors/jstree/themes/default/style.min.css" />
+            <script type="text/javascript" src="/gentelella/vendors/jstree/jstree.min.js"></script>
+
+            <style type="text/css">
+                .leftMenu {position:absolute;width:20%;margin-top: 5px;}
+                #container {border:1px solid #dcdcdc;padding:8px;}
+                .rightMenu {margin-left: 22%;}
+                .buttonMenu {margin-top: 10px;margin-left: 15px;}
+            </style>
+
+            <script type="text/javascript">
+
+                /*<![CDATA[*/
+                var sessionAuth = "[[${session['MENU_AUTH']}]]";
+                /*]]*/
+
+                $(function() {
+                    var node_data;
+
+                    $.post("/admin/menu/getRoot.json", function (data) {
+                        createJSTrees(data);
+                    });
+
+
+                    function createJSTrees(jsonData) {
+                        console.log(JSON.stringify(jsonData));
+                        $("#container").jstree({
+                            "core": {
+                                "data": jsonData,
+                                "check_callback": true
+                            },
+                            "plugins": ["dnd", "state", "contextmenu", "types"],
+                            "types" : {
+                                "default" : {
+                                    "icon" : "fa fa-folder",
+                                    "draggable" : true,
+                                    "valid_children" : ["default","file"]
+
+                                },
+                                "LEAF" : {
+                                    "icon" : "fa fa-file-text",
+                                    "draggable" : true,
+                                    "valid_children" : []
+                                }
+                            },
+                            "contextmenu": {
+                                "items": function ($node) {
+                                    console.log("=====>" + $node.type);
+                                    var tree = $("#container").jstree(true);
+
+                                    if($node.type == 'LEAF') {
+                                        return {
+                                            "삭제": {
+                                                "separator_before": false,
+                                                "separator_after": true,
+                                                "label": "삭제",
+                                                action: function (obj) {
+
+                                                    if(sessionAuth.indexOf("D") < 0) {
+                                                        alert(/*<![CDATA[*/"[[#{common.auth.remove}]]"/*]]*/);
+                                                        return false;
+                                                    }
+
+                                                    if (confirm("삭제 하시겠습니까?")) {
+                                                        tree.delete_node($node);
+                                                    }
+                                                }
+                                            },
+                                            "수정": {
+                                                "separator_before": false,
+                                                "separator_after": true,
+                                                "label": "수정",
+                                                action: function (obj) {
+
+                                                    if(sessionAuth.indexOf("U") < 0) {
+                                                        alert(/*<![CDATA[*/"[[#{common.auth.update}]]"/*]]*/);
+                                                        return false;
+                                                    }
+
+                                                    tree.edit($node);
+                                                }
+                                            },
+                                        }
+                                    } else {
+                                        return {
+                                            "생성": {
+                                                "separator_before": false,
+                                                "separator_after": true,
+                                                "label": "생성",
+                                                "action": false,
+                                                "submenu": {
+                                                    "링크": {
+                                                        "separator_before": false,
+                                                        "separator_after": true,
+                                                        "label": "링크",
+                                                        action: function (obj) {
+
+                                                            if(sessionAuth.indexOf("C") < 0) {
+                                                                alert(/*<![CDATA[*/"[[#{common.auth.create}]]"/*]]*/);
+                                                                return false;
+                                                            }
+
+                                                            $node = tree.create_node($node, {
+                                                                text: 'New File',
+                                                                type: 'file',
+                                                                icon: 'fa fa-file-text'
+                                                            });
+                                                            tree.deselect_all();
+                                                            tree.select_node($node);
+                                                        }
+                                                    },
+                                                    "폴더": {
+                                                        "separator_before": false,
+                                                        "separator_after": true,
+                                                        "label": "폴더",
+                                                        action: function (obj) {
+
+                                                            if(sessionAuth.indexOf("C") < 0) {
+                                                                alert(/*<![CDATA[*/"[[#{common.auth.create}]]"/*]]*/);
+                                                                return false;
+                                                            }
+
+                                                            $node = tree.create_node($node, {
+                                                                text: 'New Folder',
+                                                                type: 'default'
+                                                            });
+                                                            tree.deselect_all();
+                                                            tree.select_node($node);
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "삭제": {
+                                                "separator_before": false,
+                                                "separator_after": true,
+                                                "label": "삭제",
+                                                action: function (obj) {
+
+                                                    if(sessionAuth.indexOf("D") < 0) {
+                                                        alert(/*<![CDATA[*/"[[#{common.auth.remove}]]"/*]]*/);
+                                                        return false;
+                                                    }
+
+                                                    if (confirm("삭제 하시겠습니까?")) {
+                                                        tree.delete_node($node);
+                                                    }
+                                                }
+                                            },
+                                            "수정": {
+                                                "separator_before": false,
+                                                "separator_after": true,
+                                                "label": "수정",
+                                                action: function (obj) {
+
+                                                    if(sessionAuth.indexOf("U") < 0) {
+                                                        alert(/*<![CDATA[*/"[[#{common.auth.update}]]"/*]]*/);
+                                                        return false;
+                                                    }
+
+                                                    tree.edit($node);
+                                                }
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        }).on('changed.jstree', function (e, data) {
+                            console.log(data);
+                            node_data = data;
+                            var i, j, id;
+                            for (i = 0, j = data.selected.length; i < j; i++) {
+                                console.log(data.selected[i]);
+                                id = data.selected[i];
+                                //r.push(data.instance.get_node(data.selected[i]).id);
+                            }
+
+                            if (id != undefined) {
+                                detailNod(id);
+                            }
+                            //$('#event_result').html('Selected: ' + r.join(', '));
+                        }).bind("dblclick.jstree", function (event) {
+                            console.log("dblclick.jstree");
+                            editNod();
+                        }).bind("create_node.jstree", function(event, data){
+                            console.log("create_node.jstree");
+                            save();
+                        }).bind("delete_node.jstree", function(event, data){
+                            console.log("delete_node.jstree");
+                            save();
+                        }).bind("rename_node.jstree", function(event, data){
+                            console.log("rename_node.jstree");
+                            save();
+                        }).bind("move_node.jstree", function(event, data){
+                            console.log("move_node.jstree");
+                            save();
+                        }).bind("paste.jstree", function(event, data){
+                            console.log("paste.jstree");
+                            save();
+                        })
+                    }
+
+
+                    /*           $("#create").click(function(){
+                                    var CurrentNode = $("#container").jstree("get_selected");
+                                    console.log(CurrentNode.length);
+                                    if(CurrentNode.length==0){
+                                        CurrentNode = "#";
+                                    }
+                                    $("#container").jstree('create_node', CurrentNode, { "data":"new_node" }, 'last');
+
+                                });*/
+
+                    /*         $("#delete").click(function(){
+
+                                    if(confirm("하위 메뉴도 함께 삭제됩니다. 삭제하시겠습니까")){
+                                        var node_data = $("#container").jstree("get_selected");
+                                        alert("node_data=="+node_data);
+                                        console.log("node_data=="+node_data[0]);
+                                        $.ajax({
+                                            url : "/menu/delete.json",
+                                            data : {id:node_data[0]},
+                                            success:function(data) {
+                                                console.log("Success to delete node.", data);
+                                                var instance = $('#container').jstree(true);
+                                                instance.delete_node(instance.get_selected());
+                                            },
+                                            error:function() {
+                                                console.log("error to delete node.");
+
+                                            }
+                                        });
+                                    }
+
+                                });*/
+
+                });//function
+
+                function editNod(){
+                    var inst = $.jstree.reference("#container");
+                    var node = $("#container").jstree("get_selected");
+
+                    var old = node.text; // trim right spaces
+
+                    inst.edit(node, null, function(node, success, cancelled) {
+                        if (!success || cancelled) return;
+                        if (node.text.replace(/\s+$/, '')==old) return;
+
+                        // all good, your rename code here
+                    });
+
+                }
+
+                function detailNod(id){
+
+                    $.ajax({
+                        url : "/admin/menu/view",
+                        data : {
+                            menuSeq : id
+                        },
+                        success:function(data) {
+                            console.log("Success to detail node.", data);
+                            $(".rightMenu").html(data);
+                        },
+                        error:function() {
+                            console.log("error to detail node.");
+
+                        }
+                    });
+
+                }
+                /* function deleteNode(){
+                         /!*var node_data = $("#container").jstree("get_selected");
+                         alert("node_data=="+node_data);*!/
+                         $.ajax({
+                             url : "/menu/delete.json",
+                             data : {id:node_data[0]},
+                             success:function(data) {
+                                 console.log("Success to delete node.", data);
+                                 var instance = $('#container').jstree(true);
+                                 instance.delete_node(instance.get_selected());
+                             },
+                             error:function() {
+                                 console.log("error to delete node.");
+
+                             }
+                         });
+
+                 }*/
+
+                function save(){
+                    node_data = $("#container").jstree(true).get_json(null, {"flat":true});
+
+                    $.ajax({
+                        method:"POST",
+                        url : "/admin/menu/orderChange.json",
+                        data : JSON.stringify(node_data),
+                        dataType : "json",
+                        contentType : "application/json; charset=UTF-8",
+                        success:function(menuData) {
+                            console.log("Success to move node.");
+                            $('#container').jstree(true).settings.core.data = menuData;
+                            $('#container').jstree(true).refresh();
+                        },
+                        error:function() {
+                            console.log("error to move node.");
+
+                        }
+                    });
+                }
+
+            </script>
+        </head>
+        <body class="nav-md">
+            <div class="container body">
+                <div class="main_container">
+                    <th:block th:replace="fragments/commonMenu"></th:block>
+                    <div class="right_col" role="main" id="content">
+                        <div class="page-title">
+                            <div class="title_left">
+                                <h3>메뉴 관리</h3>
+                            </div>
+
+                            <div class="title_right">
+                            </div>
+                        </div>
+                        <div class="x_content">
+                            <div class="leftMenu">
+                                <h4>메뉴 트리</h4>
+                                <div id="container"></div>
+                            </div>
+                            <div class="rightMenu"></div>
+                        </div>
+                        <th:block th:replace="fragments/commonModal"></th:block>
+                    </div>
+                    <th:block th:replace="fragments/commonFooter"></th:block>
+                </div>
+            </div>
+        </body>
+    </html>

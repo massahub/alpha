@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="x_content">
+    <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+        <tbody>
+
+        <tr>
+            <td style="width:20%"> NAME </td>
+            <td th:text="${menuFunc.getName()}"></td>
+        </tr>
+        <tr>
+            <td> URL </td>
+            <td th:text="${menuFunc.getUrl()}"></td>
+        </tr>
+        <tr>
+            <td> AUTH </td>
+            <td th:text="${menuFunc.getAuth()}"></td>
+        </tr>
+
+        <tr>
+            <td> DESCRIPTION </td>
+            <td>
+                <textarea style="width:300px;" rows="4" cols="10" id="description" th:text="${menuFunc.getDescription()}" readonly></textarea>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <table style="width:100%">
+            <tr>
+                <td align="right">
+                    <input class="btn btn-danger" type="button" value='삭제' id="btn_remove" data-dismiss="modal"/>
+                    <input class="btn btn-primary" type="button" value='확인' data-dismiss="modal"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        /*<![CDATA[*/
+        var sessionAuth = "[[${session['MENU_AUTH']}]]";
+
+        var funcSeq = [[${menuFunc.getFuncSeq()}]];
+        var menuSeq = [[${menuFunc.getMenuSeq()}]];
+        /*]]*/
+
+        // 저장
+        $('#btn_remove').click(function() {
+            if(sessionAuth.indexOf("D") < 0) {
+                alert(/*<![CDATA[*/"[[#{common.auth.remove}]]"/*]]*/);
+                return false;
+            }
+
+            if(confirm(/*<![CDATA[*/"[[#{common.confirm.remove}]]"/*]]*/)) {
+                $.ajax({
+                    url: "/admin/menu/func/remove.json",
+                    method: "POST",
+                    data: {
+                        funcSeq: funcSeq,
+                        menuSeq: menuSeq
+                    },
+                    dataType: "text",
+                    success: function (data) {
+                        console.log("Success to detail node.");
+                        // $(".rightMenu").html(data);
+                        page_move("/admin/menu/search");
+                    },
+                    error: function (request, status, error) {
+                        console.log("code[" + request.status + "] message[" + request.responseText + "] error[" + error + "]");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</html>

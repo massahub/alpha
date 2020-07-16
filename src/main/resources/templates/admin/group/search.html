@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/commonHeader"></th:block>
+
+
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <th:block th:replace="fragments/commonMenu"></th:block>
+        <div class="right_col" role="main" id="content">
+            <!-- right_content -->
+            <div class="" id="right_content">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>권한 관리</h3>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>목록</h2>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="x_content">
+                                <table id="datatable" class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>관리자 ID</th>
+                                        <th>관리자 명</th>
+                                        <th>사용자 그룹</th>
+                                        <th>등록일</th>
+                                        <th>관리</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<th:block th:replace="fragments/commonFooter"></th:block>
+
+<!-- /right_content -->
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var table = $("#datatable").DataTable({
+            lengthChange: false,    // 건수 표시
+            searching : false,      // 검색 표시
+            ordering: false,        // 정렬 기능 표시
+            paging : false,         // 페이징 표시
+            info : false,           //좌측하단 정보 표시
+            processing: false,
+            serverSide: true,
+            iDisplayStart: 0,
+            iDisplayLength: 15,
+            autoWidth: false,
+            bDestroy : true,
+            ajax: {
+                url: "/admin/group/search.json",
+                type: 'POST'
+            },
+            columns : [
+                { name : "adminGroupSeq" },
+                { name : "name" },
+                { name : "description" },
+                { name : "regDate" },
+                { name : "adminGroupSeq" }
+            ],
+            order : [
+                [3, 'asc']
+            ],
+            dom: "Bfrtip",
+
+            buttons : [
+                {
+                    text: '추가',
+                    className: "btn btn-xs btn-primary",
+                    action: function (e, dt, node, config ) {
+                        $.ajax({
+                            type	 : "GET",
+                            url		 : "/admin/group/create",
+                            data	 : [],
+                            success :	function(response){
+                                $("#content").html(response);
+                            },
+                            error : function(){
+                                console.log("error!!");
+                                //err_page();
+                                return false;
+                            }
+                        });
+                    },
+                }
+            ],
+            fnCreatedRow: function(nRow, aData, idataIndex) {
+                var adminGroupSeq = $(nRow).find('td').eq(0).text();
+                var detailText = '<a href="#" data-admin-group-seq=' + adminGroupSeq + ' class="btn btn-primary btn-xs btn-view">상세</a>';
+                var modifyText = '<a href="#" data-admin-group-seq=' + adminGroupSeq + ' class="btn btn-info btn-xs btn-modify">수정</a>';
+
+                $(nRow).find('td:last').html('').append(detailText+ modifyText);
+            }
+        });
+
+        $('#btn_add').click(function(e) {
+            $.ajax({
+                url : "/admin/group/create",
+                method : "GET",
+                data : {},
+                dataType : "text",
+                success:function(data) {
+                    $(".rightMenu").html(data);
+                },
+                error:function() {
+                    console.log("error.");
+
+                }
+            });
+        });
+
+    });
+
+    $(document).on("click",".btn-view", function() {
+        var adminGroupSeq = $(this).attr("data-admin-group-seq");
+        $.ajax({
+            url : "/admin/group/view",
+            method : "GET",
+            data : {
+                adminGroupSeq : adminGroupSeq
+            },
+            dataType : "text",
+            success:function(data) {
+                $("#content").html(data);
+            },
+            error:function() {
+                console.log("error.");
+
+            }
+        });
+    });
+
+    $(document).on("click",".btn-modify", function() {
+        var adminGroupSeq = $(this).attr("data-admin-group-seq");
+        $.ajax({
+            url : "/admin/group/modify",
+            method : "GET",
+            data : {
+                adminGroupSeq : adminGroupSeq
+            },
+            dataType : "text",
+            success:function(data) {
+                $("#content").html(data);
+            },
+            error:function() {
+                console.log("error.");
+            }
+        });
+    });
+
+</script>
+
+</html>

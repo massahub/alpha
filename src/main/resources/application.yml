@@ -24,6 +24,8 @@ spring:
     url: jdbc:mysql://3.34.5.49:3306/testdb?autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: root
     password: root.123
+    hikari:
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
@@ -54,12 +56,12 @@ spring:
 
 
 mybatis:
-  type-aliases-package: com.mobilepark.springboot.repository
+  type-aliases-package: com.massa.alpha.repository
   mapper-locations: mybatis/mapper/*.xml
 
 
 logging:
-  file: /Users/kas0610/Project/logs/mobilepark2019.log
+  file: /Users/atingle/logs/massa.log
   level:
     root: INFO
     org.springframework.web: INFO
@@ -67,6 +69,8 @@ logging:
 
 resources:
   static:
+    images: /images/
+
     fileupload:
       location: /Users/atingle/Downloads/
       uri_path: /file/

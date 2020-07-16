@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="x_content">
+<h4>메뉴 상세 정보</h4>
+    <form method="get" id="vForm" name="vForm" onsubmit="return false;">
+    <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+        <tbody>
+            <tr>
+                <td style="width:20%"> ID </td>
+                <td th:text="${menu.getMenuSeq()}"></td>
+            </tr>
+            <tr>
+                <td> 메뉴명 </td>
+                <td th:text="${menu.getTitle()}"></td>
+            </tr>
+            <tr>
+                <td> TYPE </td>
+                <td th:text="${menu.getType()}"></td>
+            </tr>
+            <tr>
+                <td> URL </td>
+                <td th:text="${menu.getUrl()}"></td>
+            </tr>
+
+            <tr>
+                <td> MENU_ICON </td>
+                <td th:text="${menu.getMenuIcon()}"></td>
+            </tr>
+
+            <tr>
+                <td> DESCRIPTION </td>
+                <td th:text="${menu.getDescription()}"></td>
+            </tr>
+
+            <tr>
+                <td> 등록 일자 </td>
+                <td th:text="${menu.getRegDate()}"></td>
+            </tr>
+
+            <tr>
+                <td> 수정 일자 </td>
+                <td th:text="${menu.getModDate()}"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <table style="width:100%">
+        <tr>
+            <td align="right">
+                <input id="btn_menu_modify" class="btn btn-success" type="button" value='수정'/>
+            </td>
+        </tr>
+    </table>
+
+    <hr/>
+
+    <div class="footer">
+        <h4>메뉴 기능</h4>
+        <table style="width:100%">
+            <tr>
+                <td align="right">
+                    <input type="button" value="추가" id="btn_menu_func_create" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-md"/>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+            <thead>
+                <tr class="headings" role="row">
+                    <th style="width:20%; text-align:left;">NAME</th>
+                    <th style="width:30%; text-align:left;">URL</th>
+                    <th style="width:20%; text-align:left;">AUTH</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+                <tr class="even pointer" style="height:1px;" th:if="${menuFuncList.size() == 0}">
+                    <td style="text-align:center; vertical-align:middle;" colspan="4">등록된 기능이 없습니다.</td>
+                </tr>
+
+                <tr class="even pointer" style="height:1px;" th:each="menuFunc : ${menuFuncList}">
+                    <td style="width:20%; text-align:left; vertical-align: middle" th:text="${menuFunc.getName()}">NAME</td>
+                    <td style="width:30%; text-align:left; vertical-align: middle" th:text="${menuFunc.getUrl()}">URL</td>
+                    <td style="width:20%; text-align:left; vertical-align: middle" th:text="${menuFunc.getAuth()}">AUTH</td>
+                    <td style="width:10%;">
+                        <input type="button" value="상세" th:attr="data-funcseq=${menuFunc.getFuncSeq()}"
+                               class="btn btn-primary menu-func-view" data-toggle="modal" data-target=".bs-example-modal-md" />
+                        <input type="button" value="수정" th:attr="data-funcseq=${menuFunc.getFuncSeq()}"
+                               class="btn btn-success menu-func-modify" data-toggle="modal" data-target=".bs-example-modal-md"/>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    </form>
+
+    <div class="modal fade bs-example-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <#--<h4>Text in a modal</h4>-->
+                    <#--<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>-->
+                    <#--<p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>-->
+                </div>
+                <!--
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        /*<![CDATA[*/
+        var menuSeq = [[${menu.getMenuSeq()}]];
+        var sessionAuth = "[[${session['MENU_AUTH']}]]";
+        /*]]*/
+
+        $('#btn_menu_modify').click(function(e) {
+            if(sessionAuth.indexOf("U") < 0) {
+                alert(/*<![CDATA[*/"[[#{common.auth.update}]]"/*]]*/);
+                return false;
+            }
+
+            $.ajax({
+                url : "/admin/menu/modify",
+                method : "GET",
+                data : {
+                    menuSeq : menuSeq
+                },
+                dataType : "text",
+                success:function(data) {
+                    console.log("Success to detail node.");
+                    $(".rightMenu").html(data);
+                },
+                error:function(request,status,error) {
+                    console.log("code["+request.status+"] message["+request.responseText+"] error["+error+"]");
+                }
+            });
+        });
+
+        $('#btn_menu_func_create').click(function(e) {
+            if(sessionAuth.indexOf("C") < 0) {
+                alert(/*<![CDATA[*/"[[#{common.auth.create}]]"/*]]*/);
+                return false;
+            }
+
+            $.ajax({
+                url : "/admin/menu/func/create",
+                method : "GET",
+                data : {
+                    menuSeq : menuSeq
+                },
+                dataType : "text",
+                success:function(data) {
+                    console.log("Success to detail node.");
+                    $(".modal-body").html(data);
+                    $("#myModalLabel").html('메뉴 기능 생성');
+
+                },
+                error:function(request,status,error) {
+                    console.log("code["+request.status+"] message["+request.responseText+"] error["+error+"]");
+                }
+            });
+        });
+
+        $('.menu-func-view').click(function(e) {
+            $.ajax({
+                url : "/admin/menu/func/view",
+                method : "GET",
+                data : {
+                    funcSeq : $(this).attr("data-funcseq")
+                },
+                dataType : "text",
+                success:function(data) {
+                    console.log("Success to detail node.");
+                    $(".modal-body").html(data);
+                    $("#myModalLabel").html('메뉴 기능 상세');
+
+                },
+                error:function(request,status,error) {
+                    console.log("code["+request.status+"] message["+request.responseText+"] error["+error+"]");
+                }
+            });
+        });
+
+        $('.menu-func-modify').click(function(e) {
+            if(sessionAuth.indexOf("U") < 0) {
+                alert(/*<![CDATA[*/"[[#{common.auth.update}]]"/*]]*/);
+                return false;
+            }
+
+            $.ajax({
+                url : "/admin/menu/func/modify",
+                method : "GET",
+                data : {
+                    funcSeq : $(this).attr("data-funcseq")
+                },
+                dataType : "text",
+                success:function(data) {
+                    console.log("Success to detail node.");
+                    $(".modal-body").html(data);
+                    $("#myModalLabel").html('메뉴 기능 수정');
+
+                },
+                error:function(request,status,error) {
+                    console.log("code["+request.status+"] message["+request.responseText+"] error["+error+"]");
+                }
+            });
+        });
+    });
+
+</script>
+
+</html>
+

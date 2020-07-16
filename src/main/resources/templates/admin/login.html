@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"  th:style="'background: url(/images/loginbackground.png) no-repeat center center fixed;'">
   <head>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        * {
+          font-family: Jua;
+        }
+
         #captchaImg {
             padding:6%;
             border: 1px solid #0275d8;
@@ -37,6 +42,8 @@
 
     <!-- Custom Theme Style -->
     <link href="/gentelella/build/css/custom.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
   </head>
 
   <body class="login">
@@ -48,12 +55,12 @@
         <div class="animate form login_form">
           <section class="login_content">
             <form action="/admin/authenticate" method="post" id="adminForm">
-              <h1>Login Form</h1>
+              <h1>Sign In</h1>
               <div>
                 <input type="text" class="form-control" placeholder="Username" required="" name="userId" value="root"/>
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" name="userPassword" value="root123456*"/>
+                <input type="password" class="form-control" placeholder="Password" required="" name="userPassword" value="root.123"/>
               </div>
 
               <!--simpleCaptcha-->
@@ -91,7 +98,6 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
                   <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
                 </div>
               </div>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="x_content">
+    <h4>메뉴 수정</h4>
+    <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+        <tbody>
+            <tr>
+                <td style="width:20%"> ID </td>
+                <td>
+                    <input type="text" id="menu_seq" name="menu_seq" readOnly="readonly" th:value="${menu.getMenuSeq()}">
+                </td>
+            </tr>
+            <tr>
+                <td> 메뉴명 </td>
+                <td>
+                    <input type="text" id="title" name="title" readOnly="readonly" th:value="${menu.getTitle()}">
+                </td>
+            </tr>
+            <tr>
+                <td> TYPE </td>
+                <td>
+                    <select id="type">
+                        <option value="DIRECTORY" th:selected="${menu.getType().toString() == 'DIRECTORY'}">DIRECTORY</option>
+                        <option value="LEAF" th:selected="${menu.getType().toString() == 'LEAF'}">LEAF</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td> URL </td>
+                <td>
+                    <input type="text" id="url" style="width: 50%" th:value="${menu.getUrl()}">
+                </td>
+            </tr>
+            <tr>
+                <td> MENU_ICON </td>
+                <td>
+                    <input type="text" id="menu_icon" style="width: 50%" th:value="${menu.getMenuIcon()}">
+                </td>
+            </tr>
+            <tr>
+                <td> DESCRIPTION </td>
+                <td>
+                    <textarea style="width:300px;" rows="4" cols="10" id="description" th:text="${menu.getDescription()}"></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <table style="width:100%">
+            <tr>
+                <td align="right">
+                    <input id="btn_save" class="btn btn-primary" type="button" value='저장'/>
+                    <input id="btn_cancel" class="btn btn-danger" type="button" value='취소'/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#btn_save').click(function(e) {
+            if(confirm(/*<![CDATA[*/"[[#{common.confirm.update}]]"/*]]*/)) {
+                $.ajax({
+                    url: "/admin/menu/modify.json",
+                    method: "POST",
+                    data: {
+                        menuSeq: $("#menu_seq").val(),
+                        title: $("#title").val(),
+                        type: $("#type").val(),
+                        url: $("#url").val(),
+                        menuIcon: $("#menu_icon").val(),
+                        description: $("#description").val()
+                    },
+                    dataType: "text",
+                    success: function (data) {
+                        console.log("Success to detail node.", data);
+                        $(".rightMenu").html(data);
+                    },
+                    error: function (request, status, error) {
+                        console.log("error to detail node.");
+                        console.log("code[" + request.status + "] message[" + request.responseText + "] error[" + error + "]");
+                    }
+                });
+            }
+        });
+
+        $('#btn_cancel').click(function(e) {
+            $.ajax({
+                url : "/admin/menu/view",
+                method : "GET",
+                data : {
+                    menuSeq : $("#menu_seq").val()
+                },
+                dataType : "text",
+                success:function(data) {
+                    $(".rightMenu").html(data);
+                },
+                error:function() {
+                    console.log("error.");
+
+                }
+            });
+        });
+    });
+
+</script>
+
+</html>
+
