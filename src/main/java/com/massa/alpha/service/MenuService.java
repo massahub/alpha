@@ -101,25 +101,7 @@ public class MenuService {
 
             for (AdminGroupAuth adminGroupAuth : adminGroupAuthList) {
                 menuMap = new HashMap<>();
-/*
-                if(adminGroupAuth.getMenu().getParentSeq() == 0) {
-                    menuMap.put("id", adminGroupAuth.getMenu().getMenuSeq());
 
-                    if(adminGroupAuth.getMenu().getParentSeq() == 0) {
-                        menuMap.put("parent", "#");
-                    } else {
-                        menuMap.put("parent", adminGroupAuth.getMenu().getParentSeq());
-                    }
-
-                    menuMap.put("text", adminGroupAuth.getMenu().getTitle());
-                    menuMap.put("type", adminGroupAuth.getMenu().getType());
-                    menuMap.put("url", adminGroupAuth.getMenu().getUrl());
-
-                    menuList.add(menuMap);
-
-                    continue;
-                }
-*/
                 if(adminGroupAuth.getAuth().indexOf("R") > -1) {
                     menuMap.put("id", adminGroupAuth.getMenu().getMenuSeq());
 

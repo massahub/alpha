@@ -52,22 +52,36 @@ public class UserAuthProvider implements AuthenticationProvider {
         ////유저가 입력한 정보를 이이디비번으으로만든다.(로그인한 유저아이디비번정보를담는다)
         UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authentication;
 
+        if(authToken == null || authentication == null) {
+            throw new UsernameNotFoundException("Token이 존재하지 않습니다.");
+        }
+
         String userId = authToken.getName();
         String userPassword = authToken.getCredentials().toString();
 
+        logger.info(">>>>>> userId : "+ userId);
+        logger.info(">>>>>> Password : "+ userPassword);
+
+        List<Admin> search = adminService.searchAll();
+
+        logger.info(">>>>>> search : " + search.toString());
+
         Admin admin = adminService.findByAdminId(userId);
+
+        logger.info(">>>>>> admin : "+ admin);
 
         if(admin == null) {
             throw new UsernameNotFoundException("일치하는 아이디 정보가 없습니다. 아이디를 다시 확인해 주세요");
         }
         if (!admin.getMcode().equals("1")){
-            throw  new UsernameNotFoundException("이메일 인증을 완료해주세요.");
+            throw new UsernameNotFoundException("이메일 인증을 완료해주세요.");
         }
 
         // 이용자가 로그인 폼에서 입력한 비밀번호와 DB로부터 가져온 암호화된 비밀번호를 비교한다
         //rawPassword: 암호화 되지않은 값
         //encodedPassword : 암호화된 값
-        if(passwordEncoder.matches(userPassword, admin.getPassword())){
+        //if(passwordEncoder.matches(userPassword, admin.getPassword())){
+        if(userPassword.equals(admin.getPassword())){
             logger.info("matches succ");
         }else{
             logger.info("matches fail");

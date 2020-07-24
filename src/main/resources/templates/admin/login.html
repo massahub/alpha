@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  th:style="'background: url(/images/loginbackground.png) no-repeat center center fixed;'">
+<html xmlns:th="http://www.thymeleaf.org"  id="particleground" th:style="'background: url(/images/sky.jpg)'">
   <head>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        /*@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
         * {
           font-family: Jua;
+        }*/
+
+        html {
+          height: 100%;
+        }
+
+        canvas {
+          position: fixed;
+        }
+
+        .login_form {
+          background-color: rgba(255,255,255, 0.7);
+          padding: 10%;
+          border-radius: 3%;
+          box-shadow: 10px 5px 5px rgba(0,0,0, 0.3);
         }
 
         #captchaImg {
@@ -16,6 +31,8 @@
     </style>
 
     <script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+
+    <script src="/particleground/jquery.particleground.min.js"></script>
 
     <!--<link rel="stylesheet" type="text/css" href="css/jquery.realperson.css">
     <script type="text/javascript" src="js/jquery.plugin.js"> </script>
@@ -53,13 +70,18 @@
 
       <div class="login_wrapper">
         <div class="animate form login_form">
-          <section class="login_content">
+          <section>
             <form action="/admin/authenticate" method="post" id="adminForm">
-              <h1>Sign In</h1>
-              <div>
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-user"></i></span>
+                </div>
                 <input type="text" class="form-control" placeholder="Username" required="" name="userId" value="root"/>
               </div>
-              <div>
+              <div class="input-group form-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-key"></i></span>
+                </div>
                 <input type="password" class="form-control" placeholder="Password" required="" name="userPassword" value="root.123"/>
               </div>
 
@@ -87,20 +109,6 @@
               </div>
 
               <div class="clearfix"></div>
-
-
-              <div class="separator">
-               <!-- <p class="change_link">첫 방문 이신가요?
-                  <a href="#signup" class="to_register"> 회원가입</a>
-                </p>-->
-                <p style="size:20px; color: #FF1C19;" th:text="${error}"></p>
-                <div class="clearfix"></div>
-                <br />
-
-                <div>
-                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
-                </div>
-              </div>
 
             </form>
           </section>
@@ -151,6 +159,12 @@
   <script src="/jquery-confirm/jquery-confirm.min.js"></script>
 
   <script type="text/javascript">
+
+      $("#particleground").particleground({
+          dotColor: '#ffffff',
+          lineColor: '#ffffff',
+          density: 7500
+      });
 
       $(window).bind("beforeunload", function (e) {
           $.ajax({
