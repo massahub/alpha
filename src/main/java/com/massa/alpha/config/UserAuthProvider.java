@@ -67,7 +67,8 @@ public class UserAuthProvider implements AuthenticationProvider {
         // 이용자가 로그인 폼에서 입력한 비밀번호와 DB로부터 가져온 암호화된 비밀번호를 비교한다
         //rawPassword: 암호화 되지않은 값
         //encodedPassword : 암호화된 값
-        if(passwordEncoder.matches(userPassword, admin.getPassword())){
+        //if(passwordEncoder.matches(userPassword, admin.getPassword())){ --> 암호화 값 못찾았음..
+        if(userPassword.equals(admin.getPassword())){
             logger.info("matches succ");
         }else{
             logger.info("matches fail");

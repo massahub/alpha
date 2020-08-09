@@ -32,13 +32,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         httpSession.setAttribute(SessionAttrName.MENU_AUTH.toString(), "N");
 
         /* 메뉴 테이블에서 URL존재 여부 체크 START */
-        for(AdminGroupAuth adminGroupAuth : adminGroupAuthList) {
+        /*for(AdminGroupAuth adminGroupAuth : adminGroupAuthList) {
             if(StringUtils.equals(adminGroupAuth.getMenu().getUrl(), uri)) {
                 isCheckURL = true;
 
                 break;
             }
-        }
+        }*/
         /* 메뉴 테이블에서 URL존재 여부 체크 END */
 
         for (MenuFunc menuFunc : menuFuncList) {
