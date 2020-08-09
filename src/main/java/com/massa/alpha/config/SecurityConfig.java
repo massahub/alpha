@@ -38,9 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-
-        String fileuploadUri = env.getProperty("resources.static.fileupload.uri_path");
-        web.ignoring().antMatchers("/api", "/jpa", "/mybatis", fileuploadUri, "common/");
+        web.ignoring().antMatchers("/api", "/jpa", "/mybatis", "common/", "images/");
     }
 
     @Override
