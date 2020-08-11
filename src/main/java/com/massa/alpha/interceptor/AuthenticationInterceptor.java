@@ -17,7 +17,7 @@ import java.util.List;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
-    @Override
+    /*@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         boolean isCheckURL = false;
@@ -31,15 +31,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         httpSession.setAttribute(SessionAttrName.MENU_AUTH.toString(), "N");
 
-        /* 메뉴 테이블에서 URL존재 여부 체크 START */
-        /*for(AdminGroupAuth adminGroupAuth : adminGroupAuthList) {
+        // 메뉴 테이블에서 URL존재 여부 체크 START
+        for(AdminGroupAuth adminGroupAuth : adminGroupAuthList) {
             if(StringUtils.equals(adminGroupAuth.getMenu().getUrl(), uri)) {
                 isCheckURL = true;
 
                 break;
             }
-        }*/
-        /* 메뉴 테이블에서 URL존재 여부 체크 END */
+        }
+        // 메뉴 테이블에서 URL존재 여부 체크 END
 
         for (MenuFunc menuFunc : menuFuncList) {
             if (StringUtils.equals(menuFunc.getUrl(), uri)) {
@@ -66,7 +66,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         return true;
-    }
+    }*/
 
     private void menuAuthSet(HttpSession httpSession, Integer menuSeq, List<AdminGroupAuth> adminGroupAuthList) {
         try {

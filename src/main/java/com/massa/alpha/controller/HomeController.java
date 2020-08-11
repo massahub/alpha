@@ -2,6 +2,7 @@ package com.massa.alpha.controller;
 
 import com.massa.alpha.data.Admin;
 import com.massa.alpha.service.AdminService;
+import com.massa.alpha.service.CheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,14 @@ public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     private final AdminService adminService;
+    private final CheckService checkService;
     private final MessageSource messageSource;
 
+
     @Autowired
-    public HomeController(AdminService adminService, MessageSource messageSource) {
+    public HomeController(AdminService adminService, CheckService checkService, MessageSource messageSource) {
         this.adminService = adminService;
+        this.checkService = checkService;
         this.messageSource = messageSource;
     }
 
@@ -137,4 +141,21 @@ public class HomeController {
         logger.info("authenticate successfully");
         return "authenticate successfully";
     }*/
+
+    /**
+     * URL 로그인 테스트
+     */
+    @RequestMapping("/mkLogin")
+    public void mkLogin(HttpServletRequest req) {
+        logger.info("mklogin success invoked!");
+        //ModelAndView mav = new ModelAndView();
+
+        try {
+            checkService.loginMarket(req);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        //return mav;
+    }
 }

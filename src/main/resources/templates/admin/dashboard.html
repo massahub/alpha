@@ -15,14 +15,37 @@
 
     <div class="row">
 
-        <div class="col-md-12 col-sm-12  ">
+        <div class="col-md-12 col-sm-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>마켓을 등록해주세요</h2>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="x_content" id="newPopup" data-toggle="modal" data-target="#newModal">
+                    <h2 style="text-align: center">+</h2>
+                </div>
+            </div>
+        </div>
 
+        <div id="newModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="book-label">
+            <div class="modal-dialog modal-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title" id="myModalLabel">마켓등록</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <form action="/admin/mkLogin" method="post" id="mkLoginForm">
+                    <div class="modal-body">
+                        ID : <input class="form-control" type="text" name="mid" id="mid" /><br>
+                        PW : <input class="form-control" type="text" name="mpw" id="mpw" /><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-xs btn-primary">확인</button>
+                        <button class="btn btn-xs btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,11 +62,6 @@
 
                     <table class="table table-hover">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>제목</th>
-                            <th>파일명</th>
-                        </tr>
                         </thead>
                         <tbody>
                         <tr>
@@ -186,6 +204,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        $("#newPopup").click(function () {
+
+        });
+
         var myAudio = document.getElementById("fileAudioArray");
 
         $("#selectPlay").click(function () {
@@ -324,6 +346,7 @@
             gainNode.gain.value -= 0.2
         }
     }
+
 
 </script>
 

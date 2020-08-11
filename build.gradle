@@ -39,6 +39,8 @@ dependencies {
 
     //SimpleCaptcha jar path
     compile files('libs/simplecaptcha-1.2.1.jar')
+    compile files('libs/jsoup-1.13.1.jar')
+    compile files('libs/jsoup-1.13.1-javadoc.jar')
 }
 
 test {
