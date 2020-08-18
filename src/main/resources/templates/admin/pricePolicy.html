@@ -1,0 +1,71 @@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+<script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+
+<!-- right_content -->
+<div class="" id="right_content">
+
+    <div class="page-title">
+        <div class="title_left">
+            <h3>가격 책정</h3>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>마진 계산기</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form class="marginForm" method="post">
+                        구매 가격(원):
+                        <input class="form-control" type="text" name="buy" id="buy">
+                        판매 가격(원) :
+                        <input class="form-control" type="text" name="sell" id="sell" /><br>
+                        무게(g) :
+                        <input class="form-control" type="text" name="weight" id="weight" /><br>
+
+                        <button class="btn btn-primary" id="marginBtn" type="submit">검색</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!--/row-->
+
+</div>
+<!-- /right_content -->
+
+<script src="/audio.js"></script>
+
+<script src="/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script src="/mobilepark_confirm.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#marginBtn").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/admin/marginInfo.json",
+                dataType: "json",
+                data: $('.marginForm').serialize(),
+                success: function (data) {
+                    console.log("result code : ", data.result);
+                },
+                error: function (req, status, error) {
+                    alertModal("code : " + req.status + "\n error : " + error);
+                }
+            });
+        });
+
+    });
+
+</script>
+
+

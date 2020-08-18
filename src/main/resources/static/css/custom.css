@@ -1760,13 +1760,6 @@ h2 {
   color: #BDBDBD; }
 
 .x_content {
-  border: 1px dashed #ccc;
-  padding: 2.5% 0 2.5% 0;
-  }
-
-.x_content:hover {
-  cursor: pointer;
-  background-color: #ccc;
 }
 
 .x_content h4 {

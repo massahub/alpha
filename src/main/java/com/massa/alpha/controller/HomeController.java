@@ -2,7 +2,7 @@ package com.massa.alpha.controller;
 
 import com.massa.alpha.data.Admin;
 import com.massa.alpha.service.AdminService;
-import com.massa.alpha.service.CheckService;
+import com.massa.alpha.service.MarginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @RestController
@@ -27,14 +25,14 @@ public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     private final AdminService adminService;
-    private final CheckService checkService;
+    private final MarginService marginService;
     private final MessageSource messageSource;
 
 
     @Autowired
-    public HomeController(AdminService adminService, CheckService checkService, MessageSource messageSource) {
+    public HomeController(AdminService adminService, MarginService marginService, MessageSource messageSource) {
         this.adminService = adminService;
-        this.checkService = checkService;
+        this.marginService = marginService;
         this.messageSource = messageSource;
     }
 
@@ -67,6 +65,29 @@ public class HomeController {
         mav.addObject("message", "mobilepark2019!");
 
         return mav;
+    }
+
+    @GetMapping("/marginInfo")
+    public ModelAndView margininfo() {
+
+        ModelAndView mav = new ModelAndView("admin/pricePolicy");
+
+        return mav;
+    }
+
+    /**
+     * 마진 정보
+     */
+    @PostMapping(value = "/marginInfo.json")
+    public @ResponseBody String margininfo(HttpServletRequest req, HttpServletResponse res) throws Exception {
+
+        String buyPrice = req.getParameter("buy");
+        String sellPrice = req.getParameter("sell");
+        String weight = req.getParameter("weight");
+
+        String result = marginService.exchangeInfo(buyPrice);
+
+        return result;
     }
 
     /**
@@ -142,20 +163,4 @@ public class HomeController {
         return "authenticate successfully";
     }*/
 
-    /**
-     * URL 로그인 테스트
-     */
-    @RequestMapping("/mkLogin")
-    public void mkLogin(HttpServletRequest req) {
-        logger.info("mklogin success invoked!");
-        //ModelAndView mav = new ModelAndView();
-
-        try {
-            checkService.loginMarket(req);
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-
-        //return mav;
-    }
 }
